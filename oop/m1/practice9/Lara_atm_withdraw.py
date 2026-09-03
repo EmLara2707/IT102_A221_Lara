@@ -34,9 +34,6 @@ def withdraw_money(account, amount):
         return True
     return False
 
-account = Account("Elizabeth Maude Lara", 10000.00)
-withdraw_money(account, 2000.00)
-
 """ 
 ######### Learning Signature ######### 
 Programmed by: Elizabeth Maude M. Lara
