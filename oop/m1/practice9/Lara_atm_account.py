@@ -4,7 +4,7 @@ class Account:
         self._balance = starting_balance
     
     def check_balance(self):
-        print(f"Current Balance: ₱{self._balance:.2f}")
+        return self._balance
     
     def deposit(self, amount):
         if amount > 0:
