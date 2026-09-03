@@ -1,0 +1,10 @@
+Timestamp: 2026-09-03 07:08:56
+Account: Elizabeth Lara
+Transaction: Deposit
+Amount: ₱750.00
+
+Timestamp: 2026-09-03 07:21:40
+Account: Elizabeth Maude Lara
+Transaction: Withdraw
+Amount: ₱2000.00
+

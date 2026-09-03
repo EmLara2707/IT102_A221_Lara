@@ -3,9 +3,6 @@ from Lara_atm_account import Account
 def check_balance(account):
     return account.check_balance()
 
-account = Account("Ele", 10000.00)
-account.check_balance()
-
 """ 
 ######### Learning Signature ######### 
 Programmed by: Elizabeth Maude M. Lara
