@@ -1,8 +1,12 @@
 def analyze_transactions():
+
     try:
+
         with open("transactions.txt", "r") as file:
             lines = file.readlines()
+
     except FileNotFoundError:
+
         return {
             "total_transactions": 0,
             "deposits": 0,
@@ -16,28 +20,36 @@ def analyze_transactions():
         }
 
     transactions = []
+
     current = {}
 
     for line in lines:
+
         line = line.strip()
 
         if not line:
             continue
 
         if line.startswith("Timestamp:"):
+
             current["timestamp"] = (
                 line.replace("Timestamp:", "").strip()
             )
-        elif line.startwith("Account:"):
+
+        elif line.startswith("Account:"):
+
             current["account"] = (
                 line.replace("Account:", "").strip()
             )
+
         elif line.startswith("Transaction:"):
+
             current["type"] = (
                 line.replace("Transaction:", "").strip()
             )
 
         elif line.startswith("Amount:"):
+
             amount_text = (
                 line.replace("Amount: ₱", "")
                 .replace(",", "")
@@ -151,3 +163,21 @@ def analyze_transactions():
         "latest_timestamp": latest_timestamp,
         "largest_transaction": largest_transaction
     }
+
+analysis = analyze_transactions()
+for key, value in analysis.items():
+    print(f"{key}: {value}")
+
+""" 
+######### Learning Signature ######### 
+Programmed by: Elizabeth Maude M. Lara
+Date Submitted: September 04, 2026
+ 
+Program Description: This program is a ATM command line interface where users can analyze their transaction history through the text file where datas are stored.
+Reflection: I learned to use object oriented programming in Python to read transaction records from a file and turn them into useful summary information.
+
+AI Usage
+[/] No AI Assistance - Completed independently without AI.
+[ ] AI as Support Tool - Used AI for explanations, syntax, or minor corrections.
+[ ] AI as Collaborative Partner - Used AI to design, structure, or co-create significant code.
+"""
