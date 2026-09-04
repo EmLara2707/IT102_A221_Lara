@@ -390,7 +390,7 @@ else:
             use_container_width=True
         ):
 
-            if not balaman_bank_utils.is_valid_amount(
+            if not Lara_bank_utils.is_valid_amount(
                 amount
             ):
 
@@ -412,11 +412,11 @@ else:
 
                 if success:
 
-                    balaman_bank_storage.update_account(
+                    Lara_bank_storage.update_account(
                         account
                     )
 
-                    balaman_bank_transactions.record_transaction(
+                    Lara_bank_transactions.record_transaction(
                         account,
                         "Withdraw",
                         amount
@@ -428,7 +428,7 @@ else:
 
                     st.metric(
                         "New Balance",
-                        balaman_bank_utils
+                        Lara_bank_utils
                         .format_currency(
                             account.check_balance()
                         )
@@ -446,7 +446,7 @@ else:
         )
 
         transactions = (
-            balaman_bank_transactions
+            Lara_bank_transactions
             .get_transactions()
         )
 
@@ -484,7 +484,7 @@ else:
                         ),
 
                     "Amount":
-                        balaman_bank_utils
+                        Lara_bank_utils
                         .format_currency(
                             transaction.get(
                                 "amount",
@@ -493,7 +493,7 @@ else:
                         ),
 
                     "Balance After":
-                        balaman_bank_utils
+                        Lara_bank_utils
                         .format_currency(
                             transaction.get(
                                 "balance_after",
@@ -527,7 +527,7 @@ else:
         )
 
         result = (
-            balaman_bank_analysis
+            Lara_bank_analysis
             .analyze_transactions(
                 account.account_number
             )
@@ -587,7 +587,7 @@ else:
 
         col1.metric(
             "Total Deposited",
-            balaman_bank_utils
+            Lara_bank_utils
             .format_currency(
                 result[
                     "total_deposited"
@@ -598,7 +598,7 @@ else:
 
         col2.metric(
             "Total Withdrawn",
-            balaman_bank_utils
+            Lara_bank_utils
             .format_currency(
                 result[
                     "total_withdrawn"
@@ -609,7 +609,7 @@ else:
 
         col3.metric(
             "Net Cash Flow",
-            balaman_bank_utils
+            Lara_bank_utils
             .format_currency(
                 result[
                     "net_cash_flow"
@@ -635,7 +635,7 @@ else:
 
         col1.metric(
             "Largest Transaction",
-            balaman_bank_utils
+            Lara_bank_utils
             .format_currency(
                 result[
                     "largest_transaction"
@@ -646,7 +646,7 @@ else:
 
         col2.metric(
             "Average Transaction",
-            balaman_bank_utils
+            Lara_bank_utils
             .format_currency(
                 result[
                     "average_transaction"
