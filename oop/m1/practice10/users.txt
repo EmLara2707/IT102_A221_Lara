@@ -1,0 +1,6 @@
+Account Number: 2023110766
+Account Name: Elizabeth Maude M. Lara
+PIN: 1234
+Account Type: Student Account
+Balance: 10000.00
+
