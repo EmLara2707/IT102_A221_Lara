@@ -229,8 +229,8 @@ def update_account(account):
                 saved_account.account_number
                 == account.account_number
             ):
-
-                saved_account._balance = (
+                # Improvement: Encapsulation, go through the class's own setter instead of writing to saved_account._balance directly from outside the class.
+                saved_account.set_balance = (
                     account.check_balance()
                 )
 

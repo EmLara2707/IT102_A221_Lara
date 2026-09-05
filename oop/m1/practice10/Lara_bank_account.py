@@ -21,6 +21,10 @@ class BankAccount(ABC):
     def check_balance(self):
         return self._balance
 
+    # Improvements: Encapsulation, to update the balance, instead of writing to _balance directly.
+    def set_balance(self, new_balance):
+        self._balance = new_balance
+
     def deposit(self, amount):
 
         if amount <= 0:
