@@ -78,3 +78,18 @@ class StudentAccount(BankAccount):
     def get_account_type(self):
 
         return "Student Account"
+
+""" 
+######### Learning Signature ######### 
+Programmed by: Elizabeth Maude M. Lara
+Date Submitted: September 5, 2026
+ 
+Program Description: I updated the class to include a set_balance(self, new_balance) method, replacing direct external writes to _balance with a controlled setter that encapsulates
+balance updates.
+Reflection:  I learned that centralizing balance changes through one method makes the class easier to maintain, since I only have to update logic in that single spot later on.
+
+AI Usage
+[/] No AI Assistance - Completed independently without AI.
+[ ] AI as Support Tool - Used AI for explanations, syntax, or minor corrections.
+[ ] AI as Collaborative Partner - Used AI to design, structure, or co-create significant code.
+"""

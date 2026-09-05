@@ -258,3 +258,18 @@ def update_account(account):
                 f"Balance: "
                 f"{saved_account.check_balance():.2f}\n\n"
             )
+
+""" 
+######### Learning Signature ######### 
+Programmed by: Elizabeth Maude M. Lara
+Date Submitted: September 5, 2026
+ 
+Program Description: I updated saved_account._balance = account.check_balance() to saved_account.set_balance(account.check_balance()) so that the balance is updated through the
+class's own setter instead of writing directly to the private attribute from outside.
+Reflection: I learned that calling the setter ensures any future rules will automatically apply, whereas direct assignment would bypass them.
+
+AI Usage
+[/] No AI Assistance - Completed independently without AI.
+[ ] AI as Support Tool - Used AI for explanations, syntax, or minor corrections.
+[ ] AI as Collaborative Partner - Used AI to design, structure, or co-create significant code.
+"""

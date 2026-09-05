@@ -12,11 +12,227 @@ import Lara_bank_utils
 # ==========================================
 
 st.set_page_config(
-    page_title="balaman Bank",
+    page_title="Lara Bank | Your Trusted Digital Banking",
     page_icon="🏦",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
+# ==========================================
+# IMPROVED CUSTOM GUI
+# ==========================================
+
+st.markdown(
+    """
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+ 
+        :root {
+            --lb-navy-900: #0B1F3A;
+            --lb-navy-700: #14345C;
+            --lb-navy-500: #1F4B7A;
+            --lb-gold-500: #C6A15B;
+            --lb-gold-600: #B08D46;
+            --lb-bg: #F4F6F9;
+            --lb-card: #FFFFFF;
+            --lb-border: #E2E6ED;
+            --lb-text: #1C2333;
+            --lb-text-muted: #5B6472;
+            --lb-success: #1F8A55;
+            --lb-danger: #C0392B;
+        }
+ 
+        html, body, [class*="css"] {
+            font-family: 'Inter', sans-serif;
+            color: var(--lb-text);
+        }
+ 
+        h1, h2, h3, h4 {
+            font-family: 'Libre Franklin', sans-serif;
+            font-weight: 700;
+            color: var(--lb-navy-900);
+        }
+ 
+        .stApp {
+            background-color: var(--lb-bg);
+        }
+ 
+        /* ---- Top brand banner ---- */
+        .lb-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(90deg, var(--lb-navy-900), var(--lb-navy-700));
+            padding: 22px 32px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+            border-bottom: 3px solid var(--lb-gold-500);
+        }
+ 
+        .lb-banner-title {
+            font-family: 'Libre Franklin', sans-serif;
+            font-weight: 800;
+            font-size: 28px;
+            color: #FFFFFF;
+            margin: 0;
+        }
+ 
+        .lb-banner-sub {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: #C9D3E0;
+            margin-top: 2px;
+        }
+ 
+        .lb-banner-badge {
+            background-color: rgba(198, 161, 91, 0.15);
+            border: 1px solid var(--lb-gold-500);
+            color: var(--lb-gold-500);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+ 
+        /* ---- Sidebar ---- */
+        section[data-testid="stSidebar"] {
+            background-color: var(--lb-navy-900);
+        }
+ 
+        section[data-testid="stSidebar"] * {
+            color: #EDEFF4 !important;
+        }
+ 
+        section[data-testid="stSidebar"] hr {
+            border-color: rgba(255,255,255,0.15);
+        }
+ 
+        .lb-sidebar-name {
+            font-family: 'Libre Franklin', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 0px;
+        }
+ 
+        .lb-sidebar-balance-card {
+            background-color: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            padding: 14px;
+            margin: 10px 0 16px 0;
+        }
+ 
+        .lb-sidebar-balance-label {
+            font-size: 11px;
+            letter-spacing: 0.3px;
+            color: #9FB0C7 !important;
+        }
+ 
+        .lb-sidebar-balance-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--lb-gold-500) !important;
+        }
+ 
+        .lb-pill {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            background-color: rgba(198, 161, 91, 0.2);
+            color: var(--lb-gold-500) !important;
+            border: 1px solid var(--lb-gold-500);
+        }
+ 
+        /* ---- Buttons ---- */
+        .stButton > button {
+            background-color: var(--lb-navy-900);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-weight: 600;
+            transition: background-color 0.15s ease-in-out;
+        }
+ 
+        .stButton > button:hover {
+            background-color: var(--lb-gold-600);
+            color: #FFFFFF;
+        }
+ 
+        section[data-testid="stSidebar"] .stButton > button {
+            background-color: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+ 
+        section[data-testid="stSidebar"] .stButton > button:hover {
+            background-color: var(--lb-gold-500);
+            border-color: var(--lb-gold-500);
+        }
+ 
+        /* ---- Inputs ---- */
+        .stTextInput > div > div > input,
+        .stNumberInput > div > div > input {
+            border-radius: 8px;
+            border: 1px solid var(--lb-border);
+        }
+ 
+        /* ---- Metric cards ---- */
+        div[data-testid="stMetric"] {
+            background-color: var(--lb-card);
+            border: 1px solid var(--lb-border);
+            border-radius: 12px;
+            padding: 16px 18px;
+            box-shadow: 0 1px 3px rgba(11, 31, 58, 0.06);
+        }
+ 
+        div[data-testid="stMetricLabel"] {
+            color: var(--lb-text-muted) !important;
+            font-size: 13px;
+        }
+ 
+        div[data-testid="stMetricValue"] {
+            color: var(--lb-navy-900) !important;
+            font-family: 'Libre Franklin', sans-serif;
+        }
+ 
+        /* ---- Section card wrapper ---- */
+        .lb-section-card {
+            background-color: var(--lb-card);
+            border: 1px solid var(--lb-border);
+            border-radius: 12px;
+            padding: 24px 26px;
+            margin-bottom: 18px;
+            box-shadow: 0 1px 3px rgba(11, 31, 58, 0.05);
+        }
+ 
+        .lb-divider-gold {
+            height: 3px;
+            width: 56px;
+            background-color: var(--lb-gold-500);
+            border-radius: 2px;
+            margin: 6px 0 18px 0;
+        }
+ 
+        /* ---- Tabs ---- */
+        button[data-baseweb="tab"] {
+            font-weight: 600;
+        }
+ 
+        /* ---- Dataframe ---- */
+        div[data-testid="stDataFrame"] {
+            border: 1px solid var(--lb-border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+ 
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # ==========================================
 # SESSION STATE
@@ -31,12 +247,22 @@ if "account" not in st.session_state:
 
     st.session_state.account = None
 
+MENU_OPTIONS = [
+    "🏠  Dashboard",
+    "💵  Deposit",
+    "🏧  Withdraw",
+    "📜  Transaction History",
+    "📊  Transaction Analysis"
+]
+
+if "menu" not in st.session_state:
+    st.session_state.men = MENU_OPTIONS[0]
 
 # ==========================================
 # BANK HEADER
 # ==========================================
 
-st.title("balaman BANK")
+st.title("Lara Bank")
 
 st.caption(
     "Secure Digital Banking System"
@@ -667,17 +893,3 @@ else:
             f"Latest Activity: "
             f"{result['latest_timestamp']}"
         )
-
-""" 
-######### Learning Signature ######### 
-Programmed by: Clyde Balaman
-Date Submitted: September 4, 2026
- 
-Program Description: This program ____.
-Reflection: I learned ____.
- 
-AI Usage
-[ ] No AI Assistance - Completed independently without AI.
-[ ] AI as Support Tool - Used AI for explanations, syntax, or minor corrections.
-[ ] AI as Collaborative Partner - Used AI to design, structure, or co-create significant code.
-"""
