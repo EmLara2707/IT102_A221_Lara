@@ -14,6 +14,7 @@ AI Usage
 
 import streamlit as st
 
+from datetime import datetime
 import Lara_bank_auth
 import Lara_bank_storage
 import Lara_bank_transactions
@@ -306,6 +307,26 @@ if "pending_menu" in st.session_state:
 
     del st.session_state.pending_menu
 
+# For Pin Lockout, Large Withdrawal OTP, and Custom Transaction Note
+
+if "failed_login_attempts" not in st.session_state:
+    st.session_state.failed_login_attempts = 0
+
+if "account_locked" not in st.session_state:
+    st.session_state.account_locked = False
+
+if "withdraw_otp" not in st.session_state:
+    st.session_state.withdraw_otp = None
+
+if "withdraw_otp_amount" not in st.session_state:
+    st.session_state.withdraw_otp_amount = 0.0
+
+if "withdraw_otp_note" not in st.session_state:
+    st.session_state.withdraw_otp_note = ""
+
+MAX_LOGIN_ATTEMPTS = 3
+OTP_THRESHOLD = 10000.0
+
 # ==========================================
 # BANK HEADER / BRANDING
 # ==========================================
@@ -345,70 +366,45 @@ if not st.session_state.logged_in:
 
 
         # ======================================
-        # LOGIN
+        # LOGIN (CHANGED!!!)
         # ======================================
 
         with login_tab:
-            st.subheader(
-                "Welcome Back"
-            )
+            st.subheader("Welcome Back")
+            st.caption("Log in with your account number and PIN to continue.")
+            st.markdown('<div class="lb-divider-gold"></div>', unsafe_allow_html=True)
 
-            st.caption(
-                "Log in with your account number and PIN to continue."
-            )
-
-            st.markdown(
-                '<div class="lb-divider-gold"></div>',
-                unsafe_allow_html=True
-            )
-
-            account_number = st.text_input(
-                "Account Number",
-                key="login_account"
-            )
-
-            pin = st.text_input(
-                "PIN",
-                type="password",
-                key="login_pin"
-            )
-
-            if st.button(
-                "Login",
-                use_container_width=True
-            ):
-
-                account, message = (
-                    Lara_bank_auth
-                    .login_account(
-                        account_number,
-                        pin
-                    )
-                )
-
-                if account is not None:
-
-                    st.session_state.logged_in = True
-
-                    st.session_state.account = (
-                        account
-                    )
-
-                    st.session_state.pending_menu = MENU_OPTIONS[0]
-                    
-                    st.success(message)
-
+            if st.session_state.account_locked:
+                st.error("🔒 Too many failed attempts. Login is locked for this session.")
+                if st.button("Unlock Login", use_container_width=True):
+                    st.session_state.account_locked = False
+                    st.session_state.failed_login_attempts = 0
                     st.rerun()
+            else:
+                account_number = st.text_input("Account Number", key="login_account")
+                pin = st.text_input("PIN", type="password", key="login_pin")
 
-                else:
+                if st.button("Login", use_container_width=True):
+                    account, message = Lara_bank_auth.login_account(account_number, pin)
 
-                    st.error(message)
+                    if account is not None:
+                        st.session_state.logged_in = True
+                        st.session_state.account = account
+                        st.session_state.failed_login_attempts = 0
+                        st.session_state.pending_menu = MENU_OPTIONS[0]
+                        st.success(message)
+                        st.rerun()
+                    else:
+                        st.session_state.failed_login_attempts += 1
+                        remaining = MAX_LOGIN_ATTEMPTS - st.session_state.failed_login_attempts
 
-            st.markdown(
-                "</div>",
-                unsafe_allow_html=True
-            )
+                    if remaining <= 0:
+                        st.session_state.account_locked = True
+                        st.error("🔒 Account locked after 3 failed attempts.")
+                    else:
+                        st.error(f"{message} ({remaining} attempt(s) remaining)")
 
+            st.markdown("</div>", unsafe_allow_html=True)
 
         # ======================================
         # REGISTRATION
@@ -695,235 +691,147 @@ else:
 
 
     # ======================================
-    # DEPOSIT
+    # DEPOSIT (CHANGED!!!)
     # ======================================
 
     elif menu == MENU_OPTIONS[1]:
+        st.header("💵 Deposit Money")
+        st.markdown('<div class="lb-divider-gold"></div>', unsafe_allow_html=True)
+        st.write(f"Current Balance: **{balance_display}**")
 
-        st.header(
-            "💵  Deposit Money"
-        )
+        amount = st.number_input("Deposit Amount", min_value=0.0, step=100.0, format="%.2f")
+        note = st.text_input("Note (optional)", key="deposit_note")
 
-        st.markdown(
-            '<div class="lb-divider-gold"></div>',
-            unsafe_allow_html=True
-        )
-
-        st.write(
-            f"Current Balance: "
-            f"**{balance_display}**"
-        )
-
-        amount = st.number_input(
-            "Deposit Amount",
-            min_value=0.0,
-            step=100.0,
-            format="%.2f"
-        )
-
-        if st.button(
-            "Confirm Deposit",
-            use_container_width=True
-        ):
-
-            if not Lara_bank_utils.is_valid_amount(
-                amount
-            ):
-
-                st.error(
-                    "Invalid deposit amount."
-                )
-
+        if st.button("Confirm Deposit", use_container_width=True):
+            if not Lara_bank_utils.is_valid_amount(amount):
+                st.error("Invalid deposit amount.")
             else:
-
-                success = account.deposit(
-                    amount
-                )
-
+                success = account.deposit(amount)
                 if success:
-
-                    Lara_bank_storage.update_account(
-                        account
-                    )
-
-                    Lara_bank_transactions.record_transaction(
-                        account,
-                        "Deposit",
-                        amount
-                    )
-
-                    st.success(
-                        "Deposit successful."
-                    )
-
-                    st.metric(
-                        "New Balance",
-                        Lara_bank_utils
-                        .format_currency(
-                            account.check_balance()
-                        )
-                    )
-
+                    Lara_bank_storage.update_account(account)
+                    Lara_bank_transactions.record_transaction(account, "Deposit", amount, note)
+                    st.success("Deposit successful.")
+                    st.metric("New Balance", Lara_bank_utils.format_currency(account.check_balance()))
 
     # ======================================
-    # WITHDRAW
+    # WITHDRAW (CHANGED!!!)
     # ======================================
 
     elif menu == MENU_OPTIONS[2]:
+        st.header("🏧 Withdraw Money")
+        st.markdown('<div class="lb-divider-gold"></div>', unsafe_allow_html=True)
+        st.write(f"Available Balance: **{balance_display}**")
 
-        st.header(
-            "🏧  Withdraw Money"
-        )
+        amount = st.number_input("Withdrawal Amount", min_value=0.0, step=100.0, format="%.2f")
+        note = st.text_input("Note (optional)", key="withdraw_note")
 
-        st.markdown(
-            '<div class="lb-divider-gold"></div>',
-            unsafe_allow_html=True
-        )
-
-        st.write(
-            f"Available Balance: "
-            f"**{balance_display}**"
-        )
-
-        amount = st.number_input(
-            "Withdrawal Amount",
-            min_value=0.0,
-            step=100.0,
-            format="%.2f"
-        )
-
-        if st.button(
-            "Confirm Withdrawal",
-            use_container_width=True
-        ):
-
-            if not Lara_bank_utils.is_valid_amount(
-                amount
-            ):
-
-                st.error(
-                    "Invalid withdrawal amount."
-                )
-
+        if st.button("Confirm Withdrawal", use_container_width=True):
+            if not Lara_bank_utils.is_valid_amount(amount):
+                st.error("Invalid withdrawal amount.")
             elif amount > account.check_balance():
-
-                st.error(
-                    "Insufficient balance."
+                st.error("Insufficient balance.")
+            elif amount >= OTP_THRESHOLD:
+                st.session_state.withdraw_otp = Lara_bank_utils.generate_otp()
+                st.session_state.withdraw_otp_amount = amount
+                st.session_state.withdraw_otp_note = note
+                st.info(
+                    f"Large withdrawal detected (≥ {Lara_bank_utils.format_currency(OTP_THRESHOLD)}). "
+                    f"Your one-time code is **{st.session_state.withdraw_otp}** (simulated SMS)."
                 )
-
             else:
-
-                success = account.withdraw(
-                    amount
-                )
-
+                success = account.withdraw(amount)
                 if success:
+                    Lara_bank_storage.update_account(account)
+                    Lara_bank_transactions.record_transaction(account, "Withdraw", amount, note)
+                    st.success("Withdrawal successful.")
+                    st.metric("New Balance", Lara_bank_utils.format_currency(account.check_balance()))
 
-                    Lara_bank_storage.update_account(
-                        account
-                    )
+        if st.session_state.withdraw_otp:
+            st.markdown('<div class="lb-divider-gold"></div>', unsafe_allow_html=True)
+            st.write("Enter the one-time code sent to you to confirm this withdrawal.")
+            entered_otp = st.text_input("One-Time Code", key="withdraw_otp_input")
 
-                    Lara_bank_transactions.record_transaction(
-                        account,
-                        "Withdraw",
-                        amount
-                    )
-
-                    st.success(
-                        "Withdrawal successful."
-                    )
-
-                    st.metric(
-                        "New Balance",
-                        Lara_bank_utils
-                        .format_currency(
-                            account.check_balance()
+            if st.button("Verify & Withdraw", use_container_width=True):
+                if entered_otp.strip() == st.session_state.withdraw_otp:
+                    success = account.withdraw(st.session_state.withdraw_otp_amount)
+                    if success:
+                        Lara_bank_storage.update_account(account)
+                        Lara_bank_transactions.record_transaction(
+                            account,
+                            "Withdraw",
+                            st.session_state.withdraw_otp_amount,
+                            st.session_state.withdraw_otp_note
                         )
-                    )
-
+                        st.success("Withdrawal successful.")
+                        st.metric("New Balance", Lara_bank_utils.format_currency(account.check_balance()))
+                    st.session_state.withdraw_otp = None
+                    st.session_state.withdraw_otp_amount = 0.0
+                    st.session_state.withdraw_otp_note = ""
+                else:
+                    st.error("Incorrect code. Please try again.")
 
     # ======================================
-    # TRANSACTION HISTORY
+    # TRANSACTION HISTORY (CHANGED!!!)
     # ======================================
 
     elif menu == MENU_OPTIONS[3]:
+        st.header("📜 Transaction History")
+        st.markdown('<div class="lb-divider-gold"></div>', unsafe_allow_html=True)
 
-        st.header(
-            "📜  Transaction History"
-        )
-
-        st.markdown(
-            '<div class="lb-divider-gold"></div>',
-            unsafe_allow_html=True
-        )
-
-        transactions = (
-            Lara_bank_transactions
-            .get_transactions()
-        )
-
-        # Show only transactions
-        # belonging to the logged-in user.
-
+        transactions = Lara_bank_transactions.get_transactions()
         transactions = [
             transaction
             for transaction in transactions
-            if transaction.get(
-                "account_number"
-            ) == account.account_number
+            if transaction.get("account_number") == account.account_number
         ]
 
+        st.subheader("Filter")
+        filter_col1, filter_col2 = st.columns(2)
+        with filter_col1:
+            type_filter = st.selectbox("Transaction Type", ["All", "Deposit", "Withdraw"])
+        with filter_col2:
+            min_amount = st.number_input("Minimum Amount", min_value=0.0, step=100.0, format="%.2f")
+
+        use_date_filter = st.checkbox("Filter by date range")
+        start_date = end_date = None
+        if use_date_filter:
+            date_col1, date_col2 = st.columns(2)
+            with date_col1:
+                start_date = st.date_input("From")
+            with date_col2:
+                end_date = st.date_input("To")
+
+        def matches_filters(transaction):
+            if type_filter != "All" and transaction.get("transaction") != type_filter:
+                return False
+            if transaction.get("amount", 0) < min_amount:
+                return False
+            if start_date or end_date:
+                try:
+                    ts = datetime.strptime(transaction.get("timestamp", ""), "%Y-%m-%d %H:%M:%S").date()
+                except ValueError:
+                    return False
+                if start_date and ts < start_date:
+                    return False
+                if end_date and ts > end_date:
+                    return False
+            return True
+
+        transactions = [t for t in transactions if matches_filters(t)]
+
         if transactions:
-
             display_data = []
-
             for transaction in transactions:
-
                 display_data.append({
-
-                    "Timestamp":
-                        transaction.get(
-                            "timestamp",
-                            "N/A"
-                        ),
-
-                    "Transaction":
-                        transaction.get(
-                            "transaction",
-                            "N/A"
-                        ),
-
-                    "Amount":
-                        Lara_bank_utils
-                        .format_currency(
-                            transaction.get(
-                                "amount",
-                                0
-                            )
-                        ),
-
-                    "Balance After":
-                        Lara_bank_utils
-                        .format_currency(
-                            transaction.get(
-                                "balance_after",
-                                0
-                            )
-                        )
+                    "Timestamp": transaction.get("timestamp", "N/A"),
+                    "Transaction": transaction.get("transaction", "N/A"),
+                    "Amount": Lara_bank_utils.format_currency(transaction.get("amount", 0)),
+                    "Note": transaction.get("note", "") or "-",
+                    "Balance After": Lara_bank_utils.format_currency(transaction.get("balance_after", 0))
                 })
-
-            st.dataframe(
-                display_data,
-                use_container_width=True,
-                hide_index=True
-            )
-
+            st.dataframe(display_data, use_container_width=True, hide_index=True)
         else:
-
-            st.info(
-                "No transaction history available."
-            )
-
+            st.info("No transactions match your filters.")
 
     # ======================================
     # TRANSACTION ANALYSIS

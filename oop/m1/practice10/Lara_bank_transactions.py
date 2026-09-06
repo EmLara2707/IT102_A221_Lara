@@ -7,12 +7,17 @@ TRANSACTIONS_FILE = "transactions.txt"
 def record_transaction(
     account,
     transaction_type,
-    amount
+    amount,
+    note=""
 ):
 
     timestamp = datetime.now().strftime(
         "%Y-%m-%d %H:%M:%S"
     )
+
+    # For Custom Transaction Note
+
+    note_to_save = note.strip() if note else "-"
 
     with open(
         TRANSACTIONS_FILE,
@@ -137,6 +142,21 @@ def get_transactions():
                 .strip()
             )
 
+        # For Custom Transaction Note
+
+        elif line.startswith("Note:"):
+            note_value = (
+                line
+                .replace(
+                    "Note:",
+                    ""
+                )
+                .strip()
+            )
+            current["note"] = (
+                "" if note_value == "-" else note_value
+            )
+
         elif line.startswith("Amount:"):
 
             amount_text = (
@@ -197,10 +217,12 @@ def get_transactions():
                 "amount" in current
             ):
 
+                # For Custom Transaction Note
+                current.setdefault("note", "")
                 transactions.append(
-                    current.copy()
+                current.copy()
                 )
 
-            current = {}
+                current = {}
 
     return transactions
