@@ -38,7 +38,7 @@ st.markdown(
             --lb-navy-700: #14345C;
             --lb-navy-500: #1F4B7A;
             --lb-gold-500: #00FFF2;
-            --lb-gold-600: #B08D46;
+            --lb-gold-600: #1F4B7A;
             --lb-bg: #021426;
             --lb-border: #E2E6ED;
             --lb-text: #1C2333;
@@ -223,6 +223,32 @@ st.markdown(
             border: 1px solid var(--lb-border);
             border-radius: 10px;
             overflow: hidden;
+        }
+
+        div[data-testid="stTab"][aria-selected="true"] .react-aria-SelectionIndicator {
+            background-color: var(--lb-gold-500) !important;
+        }
+
+        div[data-testid="stTab"][aria-selected="true"] p {
+            color: var(--lb-gold-500) !important;
+        }
+
+        label[data-testid="stRadioOption"][data-selected="true"] > div > div > div:first-child {
+            background-color: var(--lb-gold-500) !important;
+            border-color: var(--lb-gold-500) !important;
+        }
+
+        label[data-testid="stRadioOption"][data-selected="true"] > div > div > div:first-child svg {
+            fill: var(--lb-gold-500) !important;
+            color: var(--lb-gold-500) !important;
+        }
+
+        div[data-testid="stTab"]:hover p {
+            color: var(--lb-gold-500) !important;
+        }
+
+        div[data-testid="stTab"] p {
+            color: #EDEFF4;
         }
 
     </style>
