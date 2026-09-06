@@ -1,0 +1,27 @@
+Timestamp: 2026-09-06 07:04:33
+Account Number: 2023110766
+Account: Elizabeth Maude M. Lara
+Account Type: Student Account
+Transaction: Withdraw
+Note: For Shopping
+Amount: ₱10000.00
+Balance After: ₱5000.00
+
+Timestamp: 2026-09-06 07:05:14
+Account Number: 2023110766
+Account: Elizabeth Maude M. Lara
+Account Type: Student Account
+Transaction: Withdraw
+Note: For Medicine
+Amount: ₱2000.00
+Balance After: ₱3000.00
+
+Timestamp: 2026-09-06 07:05:46
+Account Number: 2023110766
+Account: Elizabeth Maude M. Lara
+Account Type: Student Account
+Transaction: Deposit
+Note: Allowance
+Amount: ₱30000.00
+Balance After: ₱33000.00
+

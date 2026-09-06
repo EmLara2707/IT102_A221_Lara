@@ -49,6 +49,11 @@ def record_transaction(
         )
 
         file.write(
+            f"Note: "
+            f"{note_to_save}\n"
+        )
+
+        file.write(
             f"Amount: "
             f"₱{amount:.2f}\n"
         )
@@ -226,3 +231,17 @@ def get_transactions():
                 current = {}
 
     return transactions
+
+"""
+######### Learning Signature #########
+Programmed by: Elizabeth Maude M. Lara
+Date Submitted: September 6, 2026
+
+Program Description: I added an optional note parameter to record_transaction() and updated get_transactions() to read it back, so deposits and withdrawals can carry a memo.
+Reflection: I learned that adding one field to a text-based storage format means updating both the write side and the read side, or the new data just gets silently dropped.
+
+AI Usage
+[ ] No AI Assistance - Completed independently without AI.
+[ ] AI as Support Tool - Used AI for explanations, syntax, or minor corrections.
+[/] AI as Collaborative Partner - Used AI to design, structure, or co-create significant code.
+"""

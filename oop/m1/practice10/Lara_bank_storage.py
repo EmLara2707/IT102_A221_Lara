@@ -230,7 +230,7 @@ def update_account(account):
                 == account.account_number
             ):
                 # Improvement: Encapsulation, go through the class's own setter instead of writing to saved_account._balance directly from outside the class.
-                saved_account.set_balance = (
+                saved_account.set_balance(
                     account.check_balance()
                 )
 
@@ -269,7 +269,21 @@ class's own setter instead of writing directly to the private attribute from out
 Reflection: I learned that calling the setter ensures any future rules will automatically apply, whereas direct assignment would bypass them.
 
 AI Usage
-[/] No AI Assistance - Completed independently without AI.
+[ ] No AI Assistance - Completed independently without AI.
 [ ] AI as Support Tool - Used AI for explanations, syntax, or minor corrections.
-[ ] AI as Collaborative Partner - Used AI to design, structure, or co-create significant code.
+[/] AI as Collaborative Partner - Used AI to design, structure, or co-create significant code.
+"""
+
+"""
+######### Learning Signature #########
+Programmed by: Elizabeth Maude M. Lara
+Date Submitted: September 6, 2026
+
+Program Description: I fixed update_account(), which was assigning a value directly to set_balance instead of calling it, so balance changes never actually saved to users.txt.
+Reflection: I learned that overwriting a method name with `=` silently replaces the method itself instead of running it.
+
+AI Usage
+[ ] No AI Assistance - Completed independently without AI.
+[ ] AI as Support Tool - Used AI for explanations, syntax, or minor corrections.
+[/] AI as Collaborative Partner - Used AI to design, structure, or co-create significant code.
 """

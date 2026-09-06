@@ -89,7 +89,7 @@ balance updates.
 Reflection:  I learned that centralizing balance changes through one method makes the class easier to maintain, since I only have to update logic in that single spot later on.
 
 AI Usage
-[/] No AI Assistance - Completed independently without AI.
+[ ] No AI Assistance - Completed independently without AI.
 [ ] AI as Support Tool - Used AI for explanations, syntax, or minor corrections.
-[ ] AI as Collaborative Partner - Used AI to design, structure, or co-create significant code.
+[/] AI as Collaborative Partner - Used AI to design, structure, or co-create significant code.
 """

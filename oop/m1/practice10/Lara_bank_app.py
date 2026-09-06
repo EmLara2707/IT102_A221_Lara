@@ -7,9 +7,24 @@ Program Description: I changed the color and layout of the welcome page and the 
 Reflection: I learned how to apply CSS to streamlit.
 
 AI Usage
-[/] No AI Assistance - Completed independently without AI.
+[ ] No AI Assistance - Completed independently without AI.
 [ ] AI as Support Tool - Used AI for explanations, syntax, or minor corrections.
-[ ] AI as Collaborative Partner - Used AI to design, structure, or co-create significant code.
+[/] AI as Collaborative Partner - Used AI to design, structure, or co-create significant code.
+
+######### Learning Signature #########
+Programmed by: Elizabeth Maude M. Lara
+Date Submitted: September 6, 2026
+
+Program Description: I added PIN lockout after 3 failed logins, an OTP confirmation step for large withdrawals, an optional note field on deposits/withdrawals,
+and search/filter controls on Transaction History.
+Reflection: I learned how to manage multi-step flows in Streamlit using session state, since the app reruns top to bottom on every interaction and needs stored state to
+remember things like a pending OTP between reruns.
+
+AI Usage
+[ ] No AI Assistance - Completed independently without AI.
+[ ] AI as Support Tool - Used AI for explanations, syntax, or minor corrections.
+[/] AI as Collaborative Partner - Used AI to design, structure, or co-create significant code.
+
 """
 
 import streamlit as st
