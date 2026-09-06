@@ -1,3 +1,17 @@
+""" 
+######### Learning Signature ######### 
+Programmed by: Elizabeth Maude M. Lara
+Date Submitted: September 6, 2026
+ 
+Program Description: I changed the color and layout of the welcome page and the main page to make it more professional and added a quick actions on the dashboard.
+Reflection: I learned how to apply CSS to streamlit.
+
+AI Usage
+[/] No AI Assistance - Completed independently without AI.
+[ ] AI as Support Tool - Used AI for explanations, syntax, or minor corrections.
+[ ] AI as Collaborative Partner - Used AI to design, structure, or co-create significant code.
+"""
+
 import streamlit as st
 
 import Lara_bank_auth
@@ -284,6 +298,13 @@ if "menu" not in st.session_state:
 
     st.session_state.menu = MENU_OPTIONS[0]
 
+if "pending_menu" in st.session_state:
+
+    st.session_state.menu_radio = st.session_state.pending_menu
+
+    st.session_state.menu = st.session_state.pending_menu
+
+    del st.session_state.pending_menu
 
 # ==========================================
 # BANK HEADER / BRANDING
@@ -373,8 +394,8 @@ if not st.session_state.logged_in:
                         account
                     )
 
-                    st.session_state.menu = MENU_OPTIONS[0]
-
+                    st.session_state.pending_menu = MENU_OPTIONS[0]
+                    
                     st.success(message)
 
                     st.rerun()
@@ -559,8 +580,8 @@ else:
 
         st.session_state.account = None
 
-        st.session_state.menu = MENU_OPTIONS[0]
-
+        st.session_state.pending_menu = MENU_OPTIONS[0]
+        
         st.rerun()
 
 
@@ -605,7 +626,7 @@ else:
 
             if st.button("💵  Deposit", use_container_width=True):
 
-                st.session_state.menu = MENU_OPTIONS[1]
+                st.session_state.pending_menu = MENU_OPTIONS[1]
 
                 st.rerun()
 
@@ -613,24 +634,24 @@ else:
 
             if st.button("🏧  Withdraw", use_container_width=True):
 
-                st.session_state.menu = MENU_OPTIONS[2]
-
+                st.session_state.pending_menu = MENU_OPTIONS[2]
+                
                 st.rerun()
 
         with qa3:
 
             if st.button("📜  History", use_container_width=True):
 
-                st.session_state.menu = MENU_OPTIONS[3]
-
+                st.session_state.pending_menu = MENU_OPTIONS[3]
+                
                 st.rerun()
 
         with qa4:
 
             if st.button("📊  Analysis", use_container_width=True):
 
-                st.session_state.menu = MENU_OPTIONS[4]
-
+                st.session_state.pending_menu = MENU_OPTIONS[4]
+                
                 st.rerun()
 
         st.divider()
@@ -1045,3 +1066,4 @@ else:
             f"Latest Activity: "
             f"{result['latest_timestamp']}"
         )
+
